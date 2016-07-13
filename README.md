@@ -18,10 +18,10 @@ Example:
 meteor-package-dump csats:mturk
 ```
 
-To get the number of stars:
+To get the git repo URL for the latest version of [`csats:mturk`](https://atmospherejs.com/csats/mturk) (requires [jq](https://stedolan.github.io/jq/)):
 
 ```bash
-meteor-package-dump csats:mturk | jq .TDBzXGRqb7FDYn3sN.starCount
+meteor-package-dump csats:mturk | jq '.[] | .latestVersion.git'
 ```
 
 ## Example output
