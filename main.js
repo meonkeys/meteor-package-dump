@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 'use strict';
 
 var async = require('async');
@@ -7,9 +9,20 @@ var debugPkg = require('debug');
 var ddpDebug = debugPkg('ddp');
 var debug = debugPkg('atmosphere');
 
-function setup(callback) {
-  debug('setup');
+function setupArgs(callback) {
+  debug('setupArgs');
   var data = {};
+  var packages = process.argv.slice(2);
+  if (packages.length !== 1) {
+    console.error('Usage: ' + process.argv[1] + ' METEOR_PACKAGE');
+    process.exit(1);
+  }
+  data.meteorPackageName = packages[0];
+  callback(null, data);
+}
+
+function setupDdp(data, callback) {
+  debug('setupDdp');
   data.ddpclient = new DDPClient({
     host: 'atmospherejs.com',
     port: 443,
@@ -52,26 +65,26 @@ function connect(data, callback) {
   });
 }
 
-function subscribe(publication, params, data, callback) {
+function subscribe(data, callback) {
   debug('subscribe');
   data.ddpclient.subscribe(
-    publication,     // name of Meteor Publish function to subscribe to 
-    params,          // any parameters used by the Publish function 
-    function () {    // callback when the subscription is complete 
+    'package',
+    [data.meteorPackageName],
+    function () {
       callback(null, data);
     }
   );
 }
 
-function dump(collection, data, callback) {
+function dump(data, callback) {
   debug('dump');
-  console.log(JSON.stringify(data.ddpclient.collections[collection]));
+  console.log(JSON.stringify(data.ddpclient.collections.packages));
   callback(null, data);
 }
 
-function unsubscribe(publication, data, callback) {
+function unsubscribe(data, callback) {
   debug('unsubscribe');
-  data.ddpclient.unsubscribe(publication);
+  data.ddpclient.unsubscribe('package');
   callback(null, data);
 }
 
@@ -81,32 +94,15 @@ function close(data, callback) {
   callback(null, data);
 }
 
-var publication = 'package';
-var subscribeParams = ['csats:mturk'];
-var collectionName = 'packages';
-
 debug('start');
 async.waterfall([
-  function(callback) {
-    setup(callback);
-  },
-  function(data, callback) {
-    connect(data, callback);
-  },
-  // START - repeat for each package //
-  function(data, callback) {
-    subscribe(publication, subscribeParams, data, callback);
-  },
-  function(data, callback) {
-    dump(collectionName, data, callback);
-  },
-  function(data, callback) {
-    unsubscribe(publication, data, callback);
-  },
-  // END - repeat for each package //
-  function(data, callback) {
-    close(data, callback);
-  }
+  setupArgs,
+  setupDdp,
+  connect,
+  subscribe,
+  dump,
+  unsubscribe,
+  close,
 ], function(error, data) {
   if (error !== null) {
     debug('something broke the waterfall');

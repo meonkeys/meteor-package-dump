@@ -10,7 +10,7 @@ npm install -g meteor-package-dump
 
 ## Usage
 
-*meteor-package-dump PACKAGE...*
+*meteor-package-dump METEOR_PACKAGE*
 
 Example:
 

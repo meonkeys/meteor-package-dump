@@ -2,7 +2,10 @@
   "name": "meteor-package-dump",
   "version": "1.0.0",
   "description": "Dump metadata for Meteor packages from atmospherejs.com",
-  "main": "index.js",
+  "main": "main.js",
+  "bin": {
+    "meteor-package-dump": "./main.js"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/meonkeys/meteor-package-dump.git"
