@@ -2,9 +2,9 @@
 
 Dump Meteor ([Atmosphere](https://atmospherejs.com)) JSON package metadata.
 
-This uses [ddp](https://www.npmjs.com/package/ddp) to connect directly to Atmosphere.
+Connects directly to Atmosphere via [ddp](https://www.npmjs.com/package/ddp).
 
-The examples below assume you have the [jq command-line JSON processor](https://stedolan.github.io/jq/) installed.
+Examples below assume you have the [jq command-line JSON processor](https://stedolan.github.io/jq/) installed.
 
 ## `meteor-package-dump` alternative: Atmosphere API
 
