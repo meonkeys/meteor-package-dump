@@ -1,6 +1,6 @@
 {
   "name": "meteor-package-dump",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Dump metadata for Meteor packages from atmospherejs.com",
   "main": "main.js",
   "bin": {
